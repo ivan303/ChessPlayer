@@ -30,13 +30,10 @@
     <ClInclude Include="GameModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameInfoView.h">
+    <ClInclude Include="ObjFileLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameBoardView.h">
+    <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,7 +44,10 @@
     <ClCompile Include="ChessPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameModel.cpp">
+    <ClCompile Include="ObjFileLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

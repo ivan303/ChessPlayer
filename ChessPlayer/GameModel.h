@@ -1,9 +1,6 @@
 #include <string.h>
 
 
-#include "GameInfoView.h"
-#include "GameBoardView.h"
-
 #include "Parser\PGNTagList.h"
 #include "Parser\PGNMoveList.h"
 #include "Parser\PGNGameResult.h"
@@ -28,8 +25,6 @@ class GameModel{
 public:
 	GameModel();
 
-	void setGameInfoView(GameInfoView view);
-	void setGameBoardView(GameBoardView view);
 
 	char** getBoard();
 	GameInfo getGameInfo();
@@ -40,8 +35,6 @@ public:
 	void stepPrevios();
 
 private:
-	GameInfoView gameInfoView;
-	GameBoardView gameBoardView;
 	GameInfo gameInfo;
 	pgn::Game game;
 	char board[8][8];
