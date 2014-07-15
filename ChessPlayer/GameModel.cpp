@@ -365,12 +365,16 @@ bool GameModel::doNextMove() {
 			board['e']['1'] = EMPTY;
 			board['d']['1'] = board['a']['1'];
 			board['a']['1'] = EMPTY;
+			doMoveInGL('e', '1', 'c', '1');
+			doMoveInGL('a', '1', 'd', '1');
 		}
 		else if (color == BLACK) {
 			board['c']['8'] = board['e']['8'];
 			board['e']['8'] = EMPTY;
 			board['d']['8'] = board['a']['8'];
 			board['a']['8'] = EMPTY;
+			doMoveInGL('e', '8', 'c', '8');
+			doMoveInGL('a', '8', 'd', '8');
 		}
 	}
 	else if (nextMove.isKingsideCastling) {
@@ -379,12 +383,16 @@ bool GameModel::doNextMove() {
 			board['h']['1'] = EMPTY;
 			board['g']['1'] = board['e']['1'];
 			board['e']['1'] = EMPTY;
+			doMoveInGL('h', '1', 'e', '1');
+			doMoveInGL('f', '1', 'g', '1');
 		}
 		else if (color == BLACK) {
 			board['f']['8'] = board['h']['8'];
 			board['h']['8'] = EMPTY;
 			board['g']['8'] = board['e']['8'];
 			board['e']['8'] = EMPTY;
+			doMoveInGL('h', '8', 'e', '8');
+			doMoveInGL('f', '8', 'g', '8');
 		}
 	}
 	else {
@@ -395,12 +403,14 @@ bool GameModel::doNextMove() {
 			toDigit = nextMoveStr[3];
 		board[toLetter][toDigit] = board[fromLetter][fromDigit];
 		board[fromLetter][fromDigit] = EMPTY;
+		doMoveInGL(fromLetter, fromDigit, toLetter, toDigit);
 	}
 
 
 	if (nextMoveColor == WHITE) nextMoveColor = BLACK;
 	else nextMoveColor = WHITE;
 	++nextMoveStrIter;
+	
 	return true;
 }
 
