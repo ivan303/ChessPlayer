@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChessPlayer.cpp" />
+    <ClCompile Include="GameModel.cpp" />
     <ClCompile Include="Initialization.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ObjFileLoader.cpp" />
