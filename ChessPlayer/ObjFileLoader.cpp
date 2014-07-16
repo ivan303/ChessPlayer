@@ -29,7 +29,7 @@ void ObjFileLoader::loadObj(std::string fileName, std::vector<glm::vec4> &vertic
 
 
 	while(in.getline(line,255)){
-		printf("%s\n",line);
+		//printf("%s\n",line);
 		
 		if(!strncmp(line,"v ",2)){
 			glm::vec4 v;

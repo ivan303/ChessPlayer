@@ -1,7 +1,14 @@
+#include <stdlib.h>
+//#include "GL\glew.h"
+#include "gl\glut.h"
+//#include "glm\glm.hpp"
+#include "glm\gtc\type_ptr.hpp"
+#include "glm\gtc\matrix_transform.hpp"
+
+
 #include <vector>
 #include <string>
-#include "glm\gtc\type_ptr.hpp"
-#include "gl\glut.h"
+
 
 class ObjFileLoader{
 public:

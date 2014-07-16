@@ -1,12 +1,36 @@
 #include <string>
 #include "ObjFileLoader.h"
 
+
+enum directions{
+	up,
+	horizontal,
+	down
+};
 class Model{
 public:
-	Model(std::string fileName);
+	Model(std::string,int,int,int);
 
 	std::string fileName;
 	ObjFileLoader *object;
+
+	//char position 
+	int color; //0-white,1-black
+	int speedHorizontal; //iloœæ iteracji
+	int speedVertical; 
+
+	float verticalShift;
+
+	int counter;
+	bool shifted;
+
+	enum directions dir;
+
+	float xStartingShift;
+	float zStartingShift;
+
+	float xAnimationShift;
+	float zAnimationShift;
 	
 	std::vector<glm::vec4> v;
 	std::vector<glm::vec3> n;

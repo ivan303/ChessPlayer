@@ -5,8 +5,23 @@
 //TODO posprz¹taæ
 
 
-Model::Model(std::string fileName){
+Model::Model(std::string fileName, int color, int xShift, int zShift){
 	this->fileName = fileName;
+	this->color = color;
+	this->speedHorizontal = 0;
+	this->speedVertical = 10;
+	this->dir = up;
+	this->verticalShift = 1;
+	this->counter = 0;
+	this->shifted = false;
+
+
+	this->xStartingShift = xShift;
+	this->zStartingShift = zShift;
+	this->xAnimationShift = this->xStartingShift;
+	this->zAnimationShift = this->zStartingShift;
+
+
 	object = new ObjFileLoader();
 	object->loadObj(fileName,v,n,e);
 	object->loadIndices(fileName,vi,ni,ti);
