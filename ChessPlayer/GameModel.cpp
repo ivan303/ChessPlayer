@@ -6,14 +6,14 @@
 
 /*
 TODO:
-Zaimplementowaæ promocje
-Zaimplementowaæ bicie en passant
+ZaimplementowaÄ‡ bicie en passant
 */
 
-GameModel::GameModel(void (*drawInGLFunc)(char, char, char, char)) {
+GameModel::GameModel(void (*drawInGLFunc)(char, char, char, char), void (*swapPieceInGLFunc)(char, char, BoardPiece)) {
 	games = new pgn::GameCollection();
 	loadGame("C:/games.pgn"); // tymczasowo
 	doMoveInGL = drawInGLFunc;
+	swapPieceInGL = swapPieceInGLFunc;
 }
 
 void GameModel::loadGame(string filename) {
@@ -213,7 +213,7 @@ vector<pair<char,char>> GameModel::getPossibleMoveSources(BoardPiece piece, char
 		fromCoordsVector.push_back(pair<char,char>(toLetter+1,toDigit+1));
 		break;
 	}
-	// tutaj trzeba wyczyscic fromCoordsVector z nieprawidlowych koordynat tj. poza plansz¹
+	// tutaj trzeba wyczyscic fromCoordsVector z nieprawidlowych koordynat tj. poza planszÂ¹
 	vector<pair<char,char>> tmp;
 	for (int i=0; i<fromCoordsVector.size(); i++) {
 		if (!(fromCoordsVector[i].first < 'a' || fromCoordsVector[i].first > 'h' || fromCoordsVector[i].second < '1' || fromCoordsVector[i].second > '8')) {
@@ -244,7 +244,7 @@ MoveInfo GameModel::getNextMove() {
 	moveInfo.algebraicStr = moveStr;
 	Color color = nextMoveColor;
 
-	// sprawdzenie specjalnych flag ruchu i wywalenie zbêdnych informacji
+	// sprawdzenie specjalnych flag ruchu i wywalenie zbÃªdnych informacji
 	if (moveStr.find('x') != string::npos) { // mamy bicie
 		isCapture = true;
 		moveStr.erase(moveStr.begin() + moveStr.find('x'));
@@ -260,7 +260,7 @@ MoveInfo GameModel::getNextMove() {
 		moveStr.erase(moveStr.begin() + moveStr.find('#'));
 	}
 
-	if (moveStr.find('=') != string::npos) { // mamy promocjê
+	if (moveStr.find('=') != string::npos) { // mamy promocjÃª
 		isPromotion = true;
 		moveStr.erase(moveStr.begin() + moveStr.find('='));
 		promoteTo = moveStr[moveStr.size()-1];
@@ -383,16 +383,16 @@ bool GameModel::doNextMove() {
 			board['h']['1'] = EMPTY;
 			board['g']['1'] = board['e']['1'];
 			board['e']['1'] = EMPTY;
-			doMoveInGL('h', '1', 'e', '1');
-			doMoveInGL('f', '1', 'g', '1');
+			doMoveInGL('h', '1', 'f', '1');
+			doMoveInGL('e', '1', 'g', '1');
 		}
 		else if (color == BLACK) {
 			board['f']['8'] = board['h']['8'];
 			board['h']['8'] = EMPTY;
 			board['g']['8'] = board['e']['8'];
 			board['e']['8'] = EMPTY;
-			doMoveInGL('h', '8', 'e', '8');
-			doMoveInGL('f', '8', 'g', '8');
+			doMoveInGL('h', '8', 'f', '8');
+			doMoveInGL('e', '8', 'g', '8');
 		}
 	}
 	else {
@@ -404,13 +404,17 @@ bool GameModel::doNextMove() {
 		board[toLetter][toDigit] = board[fromLetter][fromDigit];
 		board[fromLetter][fromDigit] = EMPTY;
 		doMoveInGL(fromLetter, fromDigit, toLetter, toDigit);
+		if (nextMove.isPromotion) {
+			board[toLetter][toDigit] = nextMove.promoteTo;
+			swapPieceInGL(toLetter, toDigit, nextMove.promoteTo);
+		}
 	}
 
 
 	if (nextMoveColor == WHITE) nextMoveColor = BLACK;
 	else nextMoveColor = WHITE;
 	++nextMoveStrIter;
-	
+
 	return true;
 }
 

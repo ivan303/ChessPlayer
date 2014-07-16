@@ -46,21 +46,21 @@ typedef enum Color {
 typedef struct MoveInfo {
 	string moveStr; // notacja przyjazna
 	string algebraicStr; // notacja algebraiczna
-	bool isQueensideCastling; // d³uga roszada
-	bool isKingsideCastling; // krótka roszada
+	bool isQueensideCastling; // dÂ³uga roszada
+	bool isKingsideCastling; // krÃ³tka roszada
 	bool isCapture; // bicie
 	bool isPromotion; // promocja
 	bool isCheck; // szach
 	bool isMate; // mat
 	bool isEnding;	// czy koniec gry
-	BoardPiece promoteTo; // na co promowaæ
+	BoardPiece promoteTo; // na co promowaÃ¦
 } MoveInfo;
 
 
 
 class GameModel{
 public:
-	GameModel(void (*drawInGLFunc)(char, char, char, char));
+	GameModel(void (*drawInGLFunc)(char, char, char, char), void (*swapPieceInGLFunc)(char, char, BoardPiece));
 	void loadGame(string fileName);
 	void stepNext();
 	GameInfo gameInfo;
@@ -71,6 +71,7 @@ public:
 	MoveInfo getNextMove();
 private:
 	void (*doMoveInGL)(char fromLetter, char fromDigit, char toLetter, char toDigit);
+	void (*swapPieceInGL)(char letter, char digit, BoardPiece newPiece);
 	vector<string>::iterator nextMoveStrIter;
 	Color nextMoveColor;
 	pgn::GameCollection *games;
