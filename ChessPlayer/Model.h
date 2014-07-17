@@ -23,6 +23,7 @@ public:
 
 	int counter;
 	bool shifted;
+	bool isCaptured;
 
 	enum directions dir;
 

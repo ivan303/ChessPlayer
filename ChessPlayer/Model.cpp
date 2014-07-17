@@ -9,11 +9,12 @@ Model::Model(std::string fileName, int color, int xShift, int zShift){
 	this->fileName = fileName;
 	this->color = color;
 	this->speedHorizontal = 0;
-	this->speedVertical = 10;
+	this->speedVertical = 500;
 	this->dir = up;
 	this->verticalShift = 1;
 	this->counter = 0;
 	this->shifted = false;
+	this->isCaptured = false;
 
 
 	this->xStartingShift = xShift;
