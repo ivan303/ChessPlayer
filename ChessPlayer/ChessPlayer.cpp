@@ -188,16 +188,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	glutInitWindowPosition(0,0);
 	glutCreateWindow("Program OpenGL");     
 
-	
+	/*
 	void (*firstPointer)(char,char,char,char);
 	firstPointer = (piecesMoving->movePieceGL);//piecesMoving->movePieceGL;
 	void (*secondPointer)(char,char,BoardPiece);
 	secondPointer = (piecesMoving->swapPieceGL);//piecesMoving->swapPieceGL;
 
-
+	*/
 
 	//gameModel = new GameModel(firstPointer,secondPointer);
-	gameModel = new GameModel(firstPointer,secondPointer);
+	gameModel = new GameModel(*piecesMoving);
 	 
 	
 
