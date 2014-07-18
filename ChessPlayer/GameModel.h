@@ -10,6 +10,7 @@
 #include <PGNGameCollection.h>
 #include <PGNMove.h>
   
+
 using namespace std;
 
 typedef struct GameInfo{
