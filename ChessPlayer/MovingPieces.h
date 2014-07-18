@@ -2,15 +2,17 @@
 //#include "GL\glew.h"
 //#include "GL\glut.h"
 
+#pragma once
 
-
-
-#include "Model.h"
 #include "GameModel.h"
+#include "Model.h"
+
 #include "Initialization.h"
 #include <iostream>
 #include <map>
 #include <utility>
+
+enum BoardPiece; // "forward declaration" dla swietego spokoju kompilatora
 
 class MovingPieces{
 public:

@@ -1,8 +1,11 @@
+#pragma once
+
 #include <string.h>
 #include <vector>
 #include <map>
 #include <utility>
 
+#include "MovingPieces.h"
 #include <PGNTagList.h>
 #include <PGNMoveList.h>
 #include <PGNGameResult.h>
@@ -57,11 +60,11 @@ typedef struct MoveInfo {
 	BoardPiece promoteTo; // na co promowaæ
 } MoveInfo;
 
-
+class MovingPieces; // "forward declaration" zeby kompilator sie nie srał
 
 class GameModel{
 public:
-	GameModel(void (*drawInGLFunc)(char, char, char, char), void (*swapPieceInGLFunc)(char, char, BoardPiece));
+	GameModel(MovingPieces &mp);
 	void loadGame(string fileName);
 	void stepNext();
 	GameInfo gameInfo;
@@ -71,10 +74,11 @@ public:
 	void printBoard();
 	MoveInfo getNextMove();
 private:
-	void (*doMoveInGL)(char fromLetter, char fromDigit, char toLetter, char toDigit);
-	void (*swapPieceInGL)(char letter, char digit, BoardPiece newPiece);
+	//void (*doMoveInGL)(char fromLetter, char fromDigit, char toLetter, char toDigit);
+	//void (*swapPieceInGL)(char letter, char digit, BoardPiece newPiece);
 	vector<string>::iterator nextMoveStrIter;
 	Color nextMoveColor;
 	pgn::GameCollection *games;
 	pgn::Game *currentGame;
+	MovingPieces &movingPieces;
 };
