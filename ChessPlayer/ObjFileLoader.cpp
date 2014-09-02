@@ -12,7 +12,16 @@
 #include <iostream>
 #include "ObjFileLoader.h"
 
-ObjFileLoader::ObjFileLoader() {
+ObjFileLoader::ObjFileLoader(std::string fileName) {
+	this->fileName=fileName;
+	this->loadObj(this->fileName,v,n,e);
+	this->loadIndices(this->fileName,vi,ni,ti);
+
+	loadVerticesIntoArray();
+	loadVerticesInto2DArray();
+	loadNormalsInto2DArray();
+	loadVerticesArrayToDraw();
+	loadNormalsArrayToDraw();
 }
 
 void ObjFileLoader::loadObj(std::string fileName, std::vector<glm::vec4> &vertices, std::vector<glm::vec3> &normals, std::vector<glm::vec2> &textures){
@@ -86,3 +95,69 @@ void ObjFileLoader::loadIndices(std::string fileName, std::vector<std::vector<in
 	in.close();
 	
 }
+void ObjFileLoader::loadVerticesIntoArray(){
+	vertices = new float[3*v.size()];
+	std::vector<glm::vec4>::iterator it;
+	int j=0;
+	for(it=v.begin(); it!=v.end(); it++){
+		vertices[j*3] = (*it).x;
+		vertices[j*3+1] = (*it).y;
+		vertices[j*3+2] = (*it).z;
+		j++;
+	}
+};
+void ObjFileLoader::loadVerticesInto2DArray(){
+	twoDimensionVertices = new float *[v.size()];
+	std::vector<glm::vec4>::iterator it;
+	for(int i=0; i<v.size(); i++)
+		twoDimensionVertices[i] = new float[3];
+	int j=0;
+	for(it=v.begin(); it!=v.end(); it++){
+		twoDimensionVertices[j][0] = (*it).x;
+		twoDimensionVertices[j][1] = (*it).y;
+		twoDimensionVertices[j][2] = (*it).z;
+		j++;
+	}
+};
+void ObjFileLoader::loadNormalsInto2DArray(){
+	twoDimensionNormals = new float *[n.size()];
+	std::vector<glm::vec3>::iterator it;
+	for(int i=0; i<n.size(); i++)
+		twoDimensionNormals[i] = new float[3];
+	int j=0;
+	for(it=n.begin(); it!=n.end(); it++){
+		twoDimensionNormals[j][0] = (*it).x;
+		twoDimensionNormals[j][1] = (*it).y;
+		twoDimensionNormals[j][2] = (*it).z;
+		j++;
+	}
+};
+void ObjFileLoader::loadVerticesArrayToDraw(){
+	verticesArrayToDraw = new float[9*vi.size()];
+	std::vector<std::vector<int>>::iterator it0;
+	std::vector<int>::iterator it1;
+	int counter=0;
+	for(it0=vi.begin(); it0!=vi.end(); it0++){
+		for(it1=(*it0).begin(); it1!=(*it0).end(); it1++){
+			for(int i=0; i<3; i++)
+				verticesArrayToDraw[3*counter+i] = twoDimensionVertices[(*it1)-1][i];
+			counter++;
+		}
+	}
+	verticesArrayToDrawSize = 3*vi.size();
+};
+void ObjFileLoader::loadNormalsArrayToDraw(){
+	normalsArrayToDraw = new float[9*ni.size()];
+	std::vector<std::vector<int>>::iterator it0;
+	std::vector<int>::iterator it1;
+	int counter = 0;
+	for(it0=ni.begin(); it0!=ni.end(); it0++){
+		for(it1=(*it0).begin(); it1!=(*it0).end(); it1++){
+			for(int i=0; i<3; i++)
+				normalsArrayToDraw[3*counter+i] = twoDimensionNormals[(*it1)-1][i];
+			counter++;
+		}
+	}
+	normalsArrayToDrawSize = 3*vi.size();
+};
+//void ObjFileLoader::clone(){

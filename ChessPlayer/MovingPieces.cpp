@@ -3,10 +3,12 @@
 #include "MovingPieces.h"
 
 
-MovingPieces::MovingPieces(){
+MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7]){
+	this->loadedModels = loadedModels;
 	moveInProgress = false;
-	V = glm::lookAt(
-		glm::vec3(-15.0f,15.0f,4.0f),
+	initialize.V = glm::lookAt(
+		//glm::vec3(-15.0f,15.0f,4.0f),
+		glm::vec3(4.0f,10.0f,10.0f),
 		glm::vec3(4.0f,0.0f,4.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	/*V = glm::lookAt(
@@ -19,9 +21,9 @@ MovingPieces::MovingPieces(){
 void MovingPieces::drawPiece(Model *piece){
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
-	glVertexPointer(3,GL_FLOAT,0,piece->verticesArrayToDraw);
-	glNormalPointer(GL_FLOAT,0,piece->normalsArrayToDraw);
-	glDrawArrays(GL_TRIANGLES,0,piece->verticesArrayToDrawSize);
+	glVertexPointer(3,GL_FLOAT,0,piece->object->verticesArrayToDraw);
+	glNormalPointer(GL_FLOAT,0,piece->object->normalsArrayToDraw);
+	glDrawArrays(GL_TRIANGLES,0,piece->object->verticesArrayToDrawSize);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 };
@@ -87,11 +89,11 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 		for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
 			if(iter->second != NULL && iter->first != pieceToMove && !(iter->second->isCaptured)){
 				M = moveInit(iter->second);
-				glLoadMatrixf(glm::value_ptr(V*M));
+				glLoadMatrixf(glm::value_ptr(initialize.V*M));
 				if(iter->second->color == 0)
 					glColor3d(1.0f,1.0f,1.0f);
 				else
-					glColor3d(1.0f,0.5f,0.0f);
+					glColor3d(0.0f,0.0f,0.0f);
 				drawPiece(iter->second);
 			}
 		}
@@ -151,14 +153,18 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 			pieceDictionary[pieceToMove] = NULL;
 			pieceToMove.first = endLetter;
 			pieceToMove.second = endDigit;
+			if(pieceDictionary[pieceToMove] != NULL)
+				piecesCaptured.push_back(pieceDictionary[pieceToMove]);
+				//alternatywnie mo¿na po prostu usuwaæ
+				
 			pieceDictionary[pieceToMove] = modelToMove;
 		}
 
-		glLoadMatrixf(glm::value_ptr(V*M));
+		glLoadMatrixf(glm::value_ptr(initialize.V*M));
 		if(modelToMove->color == 0)
 			glColor3d(1.0f,1.0f,1.0f);
 		else
-			glColor3d(1.0f,0.5f,0.0f);
+			glColor3d(0.0f,0.0f,0.0f);
 		drawPiece(modelToMove);
 		glutSwapBuffers();
 	}
@@ -166,7 +172,10 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 glm::mat4 MovingPieces::moveInit(Model *model){
 	glm::mat4 M = glm::mat4();
 	//transformacje
+	
 	M = glm::translate(M,glm::vec3(model->xStartingShift,0.0f,model->zStartingShift));
+	/*if(model->color == 1 && model->pieceName == "knight")
+		M = glm::rotate(M,90.0f,glm::vec3(0.0f,1.0f,0.0f));*/
 	return M;
 };
 void MovingPieces::initDictionary(Model *pieces[4][8]){
@@ -192,7 +201,95 @@ void MovingPieces::initDictionary(Model *pieces[4][8]){
 			}
 		}
 };
-void MovingPieces::swapPieceGL(char letter, char digit, BoardPiece newPiece){};
+void MovingPieces::swapPieceGL(char letter, char digit, BoardPiece newPiece){
+	std::pair<char,char> destination;
+	std::pair<char,char> shift;
+	destination.first = letter;
+	destination.second = digit;
+	//std::map<std::pair<char,char>,Model*>::iterator iter;
+	
+	//std::list<Model*>::iterator iter;
+	Model *pointer;
+	bool found = false;
+
+	piecesCaptured.push_back(pieceDictionary[destination]);
+	/*iter = piecesCaptured.begin();
+	(*iter)->pieceName;*/
+	
+	//while(!found){
+	//	if(newPiece == 'Q' && (*iter)->pieceName == "queen" && (*iter)->color == 1){ //black
+	//		//pointer = piecesCaptured.erase(iter);
+	//		pointer = piecesCaptured.
+	//	}
+	shift.first = destination.first - 0x60;
+	shift.second = destination.second - 0x30;
+	Model *promotedPiece;
+	switch(newPiece){
+	case WPAWN:
+		//tableOfPromotedPieces.push_back(new Model(loadedModels[0],0,shift.second,shift.first));
+		promotedPiece = new Model(loadedModels[0],0,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case WBISHOP:
+		promotedPiece = new Model(loadedModels[1],0,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case WROOK:
+		promotedPiece = new Model(loadedModels[2],0,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case WQUEEN:
+		promotedPiece = new Model(loadedModels[3],0,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case WKING:
+		promotedPiece = new Model(loadedModels[4],0,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case WKNIGHT:
+		promotedPiece = new Model(loadedModels[5],0,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case BPAWN:
+		promotedPiece = new Model(loadedModels[0],1,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case BBISHOP:
+		promotedPiece = new Model(loadedModels[1],1,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case BROOK:
+		promotedPiece = new Model(loadedModels[2],1,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case BQUEEN:
+		promotedPiece = new Model(loadedModels[3],1,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case BKING:
+		promotedPiece = new Model(loadedModels[4],1,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	case BKNIGHT:
+		promotedPiece = new Model(loadedModels[6],1,shift.second,shift.first);
+		pieceDictionary[destination] = promotedPiece;
+		break;
+	}
+
+	std::map<std::pair<char,char>,Model*>::iterator iter;
+	glm::mat4 M;
+	for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
+			if(iter->second != NULL){
+				M = moveInit(iter->second);
+				glLoadMatrixf(glm::value_ptr(initialize.V*M));
+				if(iter->second->color == 0)
+					glColor3d(1.0f,1.0f,1.0f);
+				else
+					glColor3d(0.0f,0.0f,0.0f);
+				drawPiece(iter->second);
+			}
+		}
+};
 void MovingPieces::displayFrame(void){
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -214,4 +311,20 @@ void MovingPieces::displayFrame(void){
 
 
 	glutSwapBuffers();
+}
+void MovingPieces::initDraw(){
+	glm::mat4 M;
+	std::map<std::pair<char,char>,Model*>::iterator iter;
+	
+	for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
+			if(iter->second != NULL && !(iter->second->isCaptured)){
+				M = moveInit(iter->second);
+				glLoadMatrixf(glm::value_ptr(initialize.V*M));
+				if(iter->second->color == 0)
+					glColor3d(1.0f,1.0f,1.0f);
+				else
+					glColor3d(0.0f,0.0f,0.0f);
+				drawPiece(iter->second);
+			}
+		}
 }

@@ -11,6 +11,7 @@
 #include <iostream>
 #include <map>
 #include <utility>
+#include <list>
 
 enum BoardPiece; // "forward declaration" dla swietego spokoju kompilatora
 
@@ -19,17 +20,21 @@ public:
 	int speedOfAnimation;
 	std::map<std::pair<char,char>,Model*> pieceDictionary;
 	//Model *tab[];
-	glm::mat4 V;
+	//glm::mat4 V;
 	int sratatatat;
+	std::list<Model*> piecesCaptured;
 
 	bool moveInProgress;
 	Initialization initialize;
+	std::list<Model*> tableOfPromotedPieces;
+	ObjFileLoader **loadedModels;
 
-	MovingPieces();
+	MovingPieces(ObjFileLoader*[7]);
 	void static displayFrame(void);
 	void drawPiece(Model*);
 	void movePieceGL(char,char,char,char);
 	void swapPieceGL(char letter, char digit, BoardPiece newPiece);
 	glm::mat4 moveInit(Model*);
 	void initDictionary(Model*[4][8]);
+	void initDraw();
 };

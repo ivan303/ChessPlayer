@@ -12,8 +12,38 @@
 
 class ObjFileLoader{
 public:
-	ObjFileLoader();
+	std::string fileName;
+	ObjFileLoader(std::string fileName);
 //private:
 	void loadObj(std::string fileName, std::vector<glm::vec4> &vertices, std::vector<glm::vec3> &normals, std::vector<glm::vec2> &textures); 
 	void loadIndices(std::string fileName, std::vector<std::vector<int>> &verIndicies, std::vector<std::vector<int>> &norIndicies, std::vector<std::vector<int>> &texIndicies);
+
+	std::vector<glm::vec4> v;
+	std::vector<glm::vec3> n;
+	std::vector<glm::vec2> e;
+
+	std::vector<std::vector<int>> vi;
+	std::vector<std::vector<int>> ni;
+	std::vector<std::vector<int>> ti;
+
+	float *vertices;
+	float **twoDimensionVertices;
+	float **twoDimensionNormals;
+	float *verticesArrayToDraw;
+	float *normalsArrayToDraw;
+	int verticesArrayToDrawSize;
+	int normalsArrayToDrawSize;
+
+	void loadVerticesIntoArray();
+	void loadVerticesInto2DArray();
+	void loadNormalsInto2DArray();
+	void loadVerticesArrayToDraw();
+	void loadNormalsArrayToDraw();
+
+	// clone();
+
+
+
+
 };
+

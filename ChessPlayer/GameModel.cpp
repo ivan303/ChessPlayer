@@ -343,10 +343,18 @@ MoveInfo GameModel::getNextMove() {
 	moveInfo.isMate = isCheckMate;
 	moveInfo.isPromotion = isPromotion;
 	if (isPromotion) {
-		if (promoteTo == 'q') if (color == WHITE) moveInfo.promoteTo = WQUEEN; else moveInfo.promoteTo = BQUEEN;
+		/*if (promoteTo == 'q') if (color == WHITE) moveInfo.promoteTo = WQUEEN; else moveInfo.promoteTo = BQUEEN;
 		else if (promoteTo == 'n') if (color == WHITE) moveInfo.promoteTo = WKNIGHT; else moveInfo.promoteTo = BKNIGHT;
 		else if (promoteTo == 'r') if (color == WHITE) moveInfo.promoteTo = WROOK; else moveInfo.promoteTo = BROOK;
-		else if (promoteTo == 'b') if (color == WHITE) moveInfo.promoteTo = WBISHOP; else moveInfo.promoteTo = BBISHOP;
+		else if (promoteTo == 'b') if (color == WHITE) moveInfo.promoteTo = WBISHOP; else moveInfo.promoteTo = BBISHOP;*/
+		if (promoteTo == 'q') moveInfo.promoteTo = BQUEEN;
+		else if (promoteTo == 'n') moveInfo.promoteTo = BKNIGHT;
+		else if (promoteTo == 'r') moveInfo.promoteTo = BROOK;
+		else if (promoteTo == 'b') moveInfo.promoteTo = BBISHOP;
+		else if (promoteTo == 'Q') moveInfo.promoteTo = WQUEEN;
+		else if (promoteTo == 'N') moveInfo.promoteTo = WKNIGHT;
+		else if (promoteTo == 'R') moveInfo.promoteTo = WROOK;
+		else if (promoteTo == 'B') moveInfo.promoteTo = WBISHOP;
 		//moveInfo.promoteTo = 
 	}
 
