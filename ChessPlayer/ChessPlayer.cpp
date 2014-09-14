@@ -73,24 +73,40 @@ void specialKeyDown(int c, int x, int y){
 		glm::vec3(-15.0f,15.0f,4.0f),
 		glm::vec3(4.0f,0.0f,4.0f),
 		glm::vec3(0.0f,1.0f,0.0f));*/
+		piecesMoving->initialize.P = glm::perspective(20.0f,1.333333f,1.0f,50.0f);
 		piecesMoving->initialize.V=glm::lookAt(
-		glm::vec3(-15.0f,15.0f,4.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
+		glm::vec3(-15.0f,15.0f,4.8f),
+		glm::vec3(4.0f,1.0f,4.8f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	}
 	if(c==GLUT_KEY_F2){
+		piecesMoving->initialize.P = glm::perspective(40.0f,1.333333f,1.0f,50.0f);
 		piecesMoving->initialize.V=glm::lookAt(
-		glm::vec3(4.0f,12.0f,12.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
+		glm::vec3(4.85f,12.0f,13.0f),
+		glm::vec3(4.85f,0.0f,5.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	}
 	if(c==GLUT_KEY_F3){
+		piecesMoving->initialize.P = glm::perspective(45.0f,1.333333f,1.0f,50.0f);
+		piecesMoving->initialize.V=glm::lookAt(
+		glm::vec3(4.85f,12.0f,5.0f),
+		glm::vec3(4.85f,0.0f,5.0f),
+		glm::vec3(1.0f,0.0f,0.0f));
+	}
+	if(c==GLUT_KEY_F4){
+		piecesMoving->initialize.P = glm::perspective(40.0f,1.333333f,1.0f,50.0f);
+		piecesMoving->initialize.V=glm::lookAt(
+		glm::vec3(4.85f,12.0f,13.0f),
+		glm::vec3(4.85f,0.0f,5.0f),
+		glm::vec3(0.0f,1.0f,0.0f));
+	}
+	if(c==GLUT_KEY_F11){
 		piecesMoving->initialize.V=glm::lookAt(
 		glm::vec3(-5.0f,1.0f,4.0f),
 		glm::vec3(4.0f,0.0f,4.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	}
-	if(c==GLUT_KEY_F4){
+	if(c==GLUT_KEY_F12){
 		piecesMoving->initialize.V=glm::lookAt(
 		glm::vec3(1.0f,6.0f,4.0f),
 		glm::vec3(1.0f,0.0f,4.0f),
@@ -178,7 +194,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//pawn = new Model("pawn.obj");
 	glutInit(&argc, (char**)argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800,800);
+	glutInitWindowSize(800,600);
 	glutInitWindowPosition(0,0);
 	glutCreateWindow("Program OpenGL");     
 

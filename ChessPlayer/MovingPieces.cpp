@@ -306,51 +306,51 @@ void MovingPieces::swapPieceGL(char letter, char digit, BoardPiece newPiece){
 	switch(newPiece){
 	case WPAWN:
 		//tableOfPromotedPieces.push_back(new Model(loadedModels[0],0,shift.second,shift.first));
-		promotedPiece = new Model(loadedModels[0],0,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[0],0,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case WBISHOP:
-		promotedPiece = new Model(loadedModels[1],0,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[1],0,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case WROOK:
-		promotedPiece = new Model(loadedModels[2],0,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[2],0,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case WQUEEN:
-		promotedPiece = new Model(loadedModels[3],0,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[3],0,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case WKING:
-		promotedPiece = new Model(loadedModels[4],0,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[4],0,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case WKNIGHT:
-		promotedPiece = new Model(loadedModels[5],0,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[5],0,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case BPAWN:
-		promotedPiece = new Model(loadedModels[0],1,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[0],1,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case BBISHOP:
-		promotedPiece = new Model(loadedModels[1],1,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[1],1,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case BROOK:
-		promotedPiece = new Model(loadedModels[2],1,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[2],1,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case BQUEEN:
-		promotedPiece = new Model(loadedModels[3],1,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[3],1,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case BKING:
-		promotedPiece = new Model(loadedModels[4],1,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[4],1,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	case BKNIGHT:
-		promotedPiece = new Model(loadedModels[6],1,shift.second,shift.first);
+		promotedPiece = new Model(loadedModels[6],1,shift.second*factor,shift.first*factor);
 		pieceDictionary[destination] = promotedPiece;
 		break;
 	}

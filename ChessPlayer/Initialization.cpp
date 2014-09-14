@@ -14,11 +14,11 @@ Initialization::Initialization(){
 	secondLightPosition[3] = 1;
 
 
-	P = glm::perspective(50.0f,1.0f,1.0f,50.0f);
-	V = glm::lookAt(
-		glm::vec3(-15.0f,15.0f,4.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
-		glm::vec3(0.0f,1.0f,0.0f));
+	P = glm::perspective(20.0f,1.333333f,1.0f,50.0f);
+	V=glm::lookAt(
+	glm::vec3(-15.0f,15.0f,4.8f),
+	glm::vec3(4.0f,1.0f,4.8f),
+	glm::vec3(0.0f,1.0f,0.0f));
 
 };
 
