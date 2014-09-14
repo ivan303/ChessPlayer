@@ -1,7 +1,10 @@
 #include "stdafx.h"
 //#include <Windows.h>
 #include "MovingPieces.h"
+#include "tga.h"
 
+
+GLuint tex;
 
 MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7],ObjFileLoader *board){
 	this->loadedModels = loadedModels;
@@ -35,11 +38,30 @@ void MovingPieces::drawPiece(Model *piece){
 };
 
 void MovingPieces::drawBoard(){
+	TGAImg img;
+	if (img.Load("plansza.tga") == IMG_OK) {
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D,tex);
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, img.GetWidth(), img.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img.GetImg());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glEnable(GL_TEXTURE_2D);
+	} else {
+		cout << "Error loading texture!" << endl;
+	}
+
+
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(3,GL_FLOAT,0,boardModel->object->verticesArrayToDraw);
 	glNormalPointer(GL_FLOAT,0,boardModel->object->normalsArrayToDraw);
+	glTexCoordPointer(2, GL_FLOAT, 0, boardModel->object->texturesArrayToDraw);
 	glDrawArrays(GL_TRIANGLES,0,boardModel->object->verticesArrayToDrawSize);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 };
@@ -319,7 +341,7 @@ void MovingPieces::swapPieceGL(char letter, char digit, BoardPiece newPiece){
 void MovingPieces::displayFrame(void){
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 P=glm::perspective(50.0f,1.0f,1.0f,50.0f);
+	glm::mat4 P=glm::perspective(25.0f,1.0f,1.0f,50.0f);
 	glm::mat4 V = glm::lookAt(
 		glm::vec3(-15.0f,15.0f,4.0f),
 		glm::vec3(4.0f,0.0f,4.0f),
