@@ -19,8 +19,7 @@ class MovingPieces{
 public:
 	int speedOfAnimation;
 	std::map<std::pair<char,char>,Model*> pieceDictionary;
-	//Model *tab[];
-	//glm::mat4 V;
+	Model *boardModel;
 	int sratatatat;
 	std::list<Model*> piecesCaptured;
 
@@ -28,13 +27,16 @@ public:
 	Initialization initialize;
 	std::list<Model*> tableOfPromotedPieces;
 	ObjFileLoader **loadedModels;
+	ObjFileLoader *board;
 
-	MovingPieces(ObjFileLoader*[7]);
+	MovingPieces(ObjFileLoader*[7],ObjFileLoader*);
+	
 	void static displayFrame(void);
+	void drawBoard();
 	void drawPiece(Model*);
 	void movePieceGL(char,char,char,char);
 	void swapPieceGL(char letter, char digit, BoardPiece newPiece);
 	glm::mat4 moveInit(Model*);
-	void initDictionary(Model*[4][8]);
+	void initDictionary(Model*[4][8],Model*);
 	void initDraw();
 };

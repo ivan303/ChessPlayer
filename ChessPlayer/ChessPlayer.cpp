@@ -34,10 +34,14 @@ Model *pawn;
 Model *knight;
 
 Model *tableOfPieces[4][8];
+Model *boardModel;
 ObjFileLoader *tableOfLoadedModels[7];
+ObjFileLoader *board;
 
 MovingPieces *piecesMoving;
 GameModel *gameModel;
+
+int factor = 1.5;
 
 int licznik = 0;
 
@@ -48,41 +52,6 @@ void displayFrame(void){
 	glShadeModel(GL_SMOOTH);
 		
 	piecesMoving->initDraw();
-
-	
-	
-	
-	
-	/*GLuint bufGeomVertices[2];
-
-	glGenBuffers(1,&(bufGeomVertices[0]));
-	glBindBuffer(GL_ARRAY_BUFFER,bufGeomVertices[0]);
-
-	glBufferData(GL_ARRAY_BUFFER,
-		geomVertexCount*sizeof(float)*3,
-		geomVertices,
-		GL_STATIC_DRAW);
-
-	
-	glm::mat4 P=glm::perspective(50.0f,1.0f,1.0f,50.0f);
-	glm::mat4 V=glm::lookAt(
-		glm::vec3(0.0f,0.0f,-5.0f),
-		glm::vec3(0.0f,0.0f,0.0f),
-		glm::vec3(0.0f,1.0f,0.0f));
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(glm::value_ptr(P));
-	glMatrixMode(GL_MODELVIEW);
-	glm::mat4 M=glm::mat4();
-	glLoadMatrixf(glm::value_ptr(V*M));
-
-	glColor3d(0.0f,1.0f,0.0f);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER,bufGeomVertices[0]);
-	glVertexPointer(3,GL_FLOAT,0,NULL);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-	glDrawArrays(GL_LINE_LOOP,0,geomVertexCount);
-	glDisableClientState(GL_VERTEX_ARRAY);*/
 
 	glutSwapBuffers();
 }
@@ -99,7 +68,7 @@ void specialKeyDown(int c, int x, int y){
 		piecesMoving->moveInProgress = true;
 		gameModel->doNextMove();
 	}
-	if(c==GLUT_KEY_RIGHT){
+	if(c==GLUT_KEY_F1){
 		/*piecesMoving->V=glm::lookAt(
 		glm::vec3(-15.0f,15.0f,4.0f),
 		glm::vec3(4.0f,0.0f,4.0f),
@@ -109,6 +78,29 @@ void specialKeyDown(int c, int x, int y){
 		glm::vec3(4.0f,0.0f,4.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	}
+	if(c==GLUT_KEY_F2){
+		piecesMoving->initialize.V=glm::lookAt(
+		glm::vec3(4.0f,12.0f,12.0f),
+		glm::vec3(4.0f,0.0f,4.0f),
+		glm::vec3(0.0f,1.0f,0.0f));
+	}
+	if(c==GLUT_KEY_F3){
+		piecesMoving->initialize.V=glm::lookAt(
+		glm::vec3(-5.0f,1.0f,4.0f),
+		glm::vec3(4.0f,0.0f,4.0f),
+		glm::vec3(0.0f,1.0f,0.0f));
+	}
+	if(c==GLUT_KEY_F4){
+		piecesMoving->initialize.V=glm::lookAt(
+		glm::vec3(1.0f,6.0f,4.0f),
+		glm::vec3(1.0f,0.0f,4.0f),
+		glm::vec3(0.0f,0.0f,1.0f));
+	}	
+		
+		
+		
+		
+		
 		//if(!piecesMoving->moveInProgress)
 		//	//...
 		//	gameModel->doNextMove();
@@ -140,6 +132,9 @@ void specialKeyUp(int c, int x, int y){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+
+	board = new ObjFileLoader("plansza.obj");
+
 	tableOfLoadedModels[0] = new ObjFileLoader("pawn.obj");
 	tableOfLoadedModels[1] = new ObjFileLoader("bishop.obj");
 	tableOfLoadedModels[2] = new ObjFileLoader("rook.obj");
@@ -148,36 +143,39 @@ int _tmain(int argc, _TCHAR* argv[])
 	tableOfLoadedModels[5] = new ObjFileLoader("knightw.obj");
 	tableOfLoadedModels[6] = new ObjFileLoader("knightb.obj");
 
+
+	boardModel = new Model(board,1,1.0*factor,1.0*factor);
+
 	for(int i=0; i<4; i++)
 		for(int j=0; j<8; j++)
 			tableOfPieces[i][j] = NULL;
-	tableOfPieces[0][0] = new Model(tableOfLoadedModels[2],1,8.0,1.0);
-	tableOfPieces[0][1] = new Model(tableOfLoadedModels[6],1,8.0,2.0);
-	tableOfPieces[0][2] = new Model(tableOfLoadedModels[1],1,8.0,3.0);
-	tableOfPieces[0][3] = new Model(tableOfLoadedModels[3],1,8.0,4.0);
-	tableOfPieces[0][4] = new Model(tableOfLoadedModels[4],1,8.0,5.0);
-	tableOfPieces[0][5] = new Model(tableOfLoadedModels[1],1,8.0,6.0);
-	tableOfPieces[0][6] = new Model(tableOfLoadedModels[6],1,8.0,7.0);
-	tableOfPieces[0][7] = new Model(tableOfLoadedModels[2],1,8.0,8.0);
+	tableOfPieces[0][0] = new Model(tableOfLoadedModels[2],1,8.0*factor,1.0*factor);
+	tableOfPieces[0][1] = new Model(tableOfLoadedModels[6],1,8.0*factor,2.0*factor);
+	tableOfPieces[0][2] = new Model(tableOfLoadedModels[1],1,8.0*factor,3.0*factor);
+	tableOfPieces[0][3] = new Model(tableOfLoadedModels[3],1,8.0*factor,4.0*factor);
+	tableOfPieces[0][4] = new Model(tableOfLoadedModels[4],1,8.0*factor,5.0*factor);
+	tableOfPieces[0][5] = new Model(tableOfLoadedModels[1],1,8.0*factor,6.0*factor);
+	tableOfPieces[0][6] = new Model(tableOfLoadedModels[6],1,8.0*factor,7.0*factor);
+	tableOfPieces[0][7] = new Model(tableOfLoadedModels[2],1,8.0*factor,8.0*factor);
 	
 	for(int i=0; i<8; i++){
-		tableOfPieces[1][i] = new Model(tableOfLoadedModels[0],1,7.0,i+1);
-		tableOfPieces[2][i] = new Model(tableOfLoadedModels[0],0,2.0,i+1);
+		tableOfPieces[1][i] = new Model(tableOfLoadedModels[0],1,7.0*factor,(i+1)*factor);
+		tableOfPieces[2][i] = new Model(tableOfLoadedModels[0],0,2.0*factor,(i+1)*factor);
 	}
 	//tableOfPieces[1][0] = new Model("pawn.obj",1,7.0,1);
 	//tableOfPieces[1][2] = new Model("bishop.obj",1,7.0,3);
 
-	tableOfPieces[3][0] = new Model(tableOfLoadedModels[2],0,1.0,1.0);
-	tableOfPieces[3][1] = new Model(tableOfLoadedModels[5],0,1.0,2.0);
-	tableOfPieces[3][2] = new Model(tableOfLoadedModels[1],0,1.0,3.0);
-	tableOfPieces[3][3] = new Model(tableOfLoadedModels[3],0,1.0,4.0);
-	tableOfPieces[3][4] = new Model(tableOfLoadedModels[4],0,1.0,5.0);
-	tableOfPieces[3][5] = new Model(tableOfLoadedModels[1],0,1.0,6.0);
-	tableOfPieces[3][6] = new Model(tableOfLoadedModels[5],0,1.0,7.0);
-	tableOfPieces[3][7] = new Model(tableOfLoadedModels[2],0,1.0,8.0);
+	tableOfPieces[3][0] = new Model(tableOfLoadedModels[2],0,1.0*factor,1.0*factor);
+	tableOfPieces[3][1] = new Model(tableOfLoadedModels[5],0,1.0*factor,2.0*factor);
+	tableOfPieces[3][2] = new Model(tableOfLoadedModels[1],0,1.0*factor,3.0*factor);
+	tableOfPieces[3][3] = new Model(tableOfLoadedModels[3],0,1.0*factor,4.0*factor);
+	tableOfPieces[3][4] = new Model(tableOfLoadedModels[4],0,1.0*factor,5.0*factor);
+	tableOfPieces[3][5] = new Model(tableOfLoadedModels[1],0,1.0*factor,6.0*factor);
+	tableOfPieces[3][6] = new Model(tableOfLoadedModels[5],0,1.0*factor,7.0*factor);
+	tableOfPieces[3][7] = new Model(tableOfLoadedModels[2],0,1.0*factor,8.0*factor);
 	
-	piecesMoving = new MovingPieces(tableOfLoadedModels);
-	piecesMoving->initDictionary(tableOfPieces);
+	piecesMoving = new MovingPieces(tableOfLoadedModels,board);
+	piecesMoving->initDictionary(tableOfPieces,boardModel);
 
 
 	//king = new Model("king.obj");

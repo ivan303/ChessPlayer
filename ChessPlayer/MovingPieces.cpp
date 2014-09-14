@@ -3,14 +3,20 @@
 #include "MovingPieces.h"
 
 
-MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7]){
+MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7],ObjFileLoader *board){
 	this->loadedModels = loadedModels;
+	this->board = board;
 	moveInProgress = false;
-	initialize.V = glm::lookAt(
-		//glm::vec3(-15.0f,15.0f,4.0f),
-		glm::vec3(4.0f,10.0f,10.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
-		glm::vec3(0.0f,1.0f,0.0f));
+	
+	
+	//initialize.V = glm::lookAt(
+	//	//glm::vec3(-15.0f,15.0f,4.0f),
+	//	glm::vec3(4.0f,10.0f,10.0f),
+	//	glm::vec3(4.0f,0.0f,4.0f),
+	//	glm::vec3(0.0f,1.0f,0.0f));
+	
+	
+	
 	/*V = glm::lookAt(
 		glm::vec3(4.0f,10.0f,4.0f),
 		glm::vec3(4.0f,0.0f,4.0f),
@@ -24,6 +30,16 @@ void MovingPieces::drawPiece(Model *piece){
 	glVertexPointer(3,GL_FLOAT,0,piece->object->verticesArrayToDraw);
 	glNormalPointer(GL_FLOAT,0,piece->object->normalsArrayToDraw);
 	glDrawArrays(GL_TRIANGLES,0,piece->object->verticesArrayToDrawSize);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+};
+
+void MovingPieces::drawBoard(){
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glVertexPointer(3,GL_FLOAT,0,boardModel->object->verticesArrayToDraw);
+	glNormalPointer(GL_FLOAT,0,boardModel->object->normalsArrayToDraw);
+	glDrawArrays(GL_TRIANGLES,0,boardModel->object->verticesArrayToDrawSize);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 };
@@ -79,12 +95,18 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 	modelToMove->speedHorizontal = xzAxisShift*modelToMove->speedVertical;
 	modelToMove->shifted = true;
 	
+
 	while(modelToMove->shifted){
 
 		initialize.init();
 		initialize.initLight();
 		glEnable(GL_COLOR_MATERIAL);
 		glShadeModel(GL_SMOOTH);
+
+		M = moveInit(boardModel);
+		glLoadMatrixf(glm::value_ptr(initialize.V*M));
+		glColor3d(0.5f,0.5f,0.5f);
+		drawBoard();
 	
 		for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
 			if(iter->second != NULL && iter->first != pieceToMove && !(iter->second->isCaptured)){
@@ -178,7 +200,11 @@ glm::mat4 MovingPieces::moveInit(Model *model){
 		M = glm::rotate(M,90.0f,glm::vec3(0.0f,1.0f,0.0f));*/
 	return M;
 };
-void MovingPieces::initDictionary(Model *pieces[4][8]){
+
+//glm::mat4
+
+void MovingPieces::initDictionary(Model *pieces[4][8], Model *boardModel){
+	this->boardModel = boardModel;
 	std::pair<char,char> coords;
 	for(int i=0; i<8; i++)
 		for(int j=0; j<8; j++){
@@ -327,4 +353,10 @@ void MovingPieces::initDraw(){
 				drawPiece(iter->second);
 			}
 		}
+
+	M = moveInit(boardModel);
+	glLoadMatrixf(glm::value_ptr(initialize.V*M));
+	glColor3d(0.5f,0.5f,0.5f);
+	drawBoard();
+
 }
