@@ -14,14 +14,18 @@
 
 ObjFileLoader::ObjFileLoader(std::string fileName) {
 	this->fileName=fileName;
-	this->loadObj(this->fileName,v,n,e);
+	this->loadObj(this->fileName,v,n,t);
 	this->loadIndices(this->fileName,vi,ni,ti);
 
 	loadVerticesIntoArray();
+	
 	loadVerticesInto2DArray();
 	loadNormalsInto2DArray();
+	loadTexturesInto2DArray();
+
 	loadVerticesArrayToDraw();
 	loadNormalsArrayToDraw();
+	loadTexturesArrayToDraw();
 }
 
 void ObjFileLoader::loadObj(std::string fileName, std::vector<glm::vec4> &vertices, std::vector<glm::vec3> &normals, std::vector<glm::vec2> &textures){
@@ -119,6 +123,18 @@ void ObjFileLoader::loadVerticesInto2DArray(){
 		j++;
 	}
 };
+void ObjFileLoader::loadTexturesInto2DArray(){
+	twoDimensionTextures = new float *[t.size()];
+	std::vector<glm::vec2>::iterator it;
+	for(int i=0; i<t.size(); i++)
+		twoDimensionTextures[i] = new float[2];
+	int j=0;
+	for(it=t.begin(); it!=t.end(); it++){
+		twoDimensionTextures[j][0] = (*it).x;
+		twoDimensionTextures[j][1] = (*it).y;
+		j++;
+	}
+}
 void ObjFileLoader::loadNormalsInto2DArray(){
 	twoDimensionNormals = new float *[n.size()];
 	std::vector<glm::vec3>::iterator it;
@@ -145,6 +161,19 @@ void ObjFileLoader::loadVerticesArrayToDraw(){
 		}
 	}
 	verticesArrayToDrawSize = 3*vi.size();
+};
+void ObjFileLoader::loadTexturesArrayToDraw(){
+	texturesArrayToDraw = new float[6*ti.size()];
+	std::vector<std::vector<int>>::iterator it0;
+	std::vector<int>::iterator it1;
+	int counter = 0;
+	for(it0=ti.begin(); it0!=ti.end(); it0++){
+		for(it1=(*it0).begin(); it1!=(*it0).end(); it1++){
+			for(int i=0; i<2; i++)
+				texturesArrayToDraw[2*counter+i] = twoDimensionTextures[(*it1)-1][i];
+			counter++;
+		}
+	}
 };
 void ObjFileLoader::loadNormalsArrayToDraw(){
 	normalsArrayToDraw = new float[9*ni.size()];

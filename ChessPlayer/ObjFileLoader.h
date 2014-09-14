@@ -20,7 +20,7 @@ public:
 
 	std::vector<glm::vec4> v;
 	std::vector<glm::vec3> n;
-	std::vector<glm::vec2> e;
+	std::vector<glm::vec2> t;
 
 	std::vector<std::vector<int>> vi;
 	std::vector<std::vector<int>> ni;
@@ -29,16 +29,25 @@ public:
 	float *vertices;
 	float **twoDimensionVertices;
 	float **twoDimensionNormals;
+	float **twoDimensionTextures;
+	
 	float *verticesArrayToDraw;
 	float *normalsArrayToDraw;
+	float *texturesArrayToDraw;
+	
 	int verticesArrayToDrawSize;
 	int normalsArrayToDrawSize;
+	int texturesArrayToDrawSize;
 
 	void loadVerticesIntoArray();
+	
 	void loadVerticesInto2DArray();
 	void loadNormalsInto2DArray();
+	void loadTexturesInto2DArray();
+
 	void loadVerticesArrayToDraw();
 	void loadNormalsArrayToDraw();
+	void loadTexturesArrayToDraw();
 
 	// clone();
 

@@ -10,6 +10,7 @@ MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7],ObjFileLoader *board){
 	this->loadedModels = loadedModels;
 	this->board = board;
 	moveInProgress = false;
+	factor = 1.1;
 	
 	
 	//initialize.V = glm::lookAt(
@@ -79,27 +80,10 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 	Model *modelToMove;
 
 	//rzeczy zwi¹zane z opengl
-	/*glClearColor(0,0,0,1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 P=glm::perspective(50.0f,1.0f,1.0f,50.0f);
-	glm::mat4 V = glm::lookAt(
-		glm::vec3(-15.0f,15.0f,4.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
-		glm::vec3(0.0f,1.0f,0.0f));
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(glm::value_ptr(P));
-	glMatrixMode(GL_MODELVIEW);*/
 	initialize.init();
-
-	/*float lightPOs[] = {5, 2, 4, 0};
-	
-	glLoadMatrixf(glm::value_ptr(V));
-	glLightfv(GL_LIGHT0,GL_POSITION,lightPOs);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_DEPTH_TEST);*/
 	initialize.initLight();
+	
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
 
@@ -108,11 +92,11 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 	modelToMove = pieceDictionary[pieceToMove];
 	
 	//transformacje zwi¹zane z animacj¹
-	int xAxisShift;
-	int zAxisShift;
+	float xAxisShift;
+	float zAxisShift;
 	float xzAxisShift;
-	xAxisShift = endDigit - startDigit;	//iloœæ jednostek przesuniêcia po x
-	zAxisShift = endLetter - startLetter; //iloœæ jednostek przesuniêcia po z
+	xAxisShift = (endDigit - startDigit)*factor;	//iloœæ jednostek przesuniêcia po x
+	zAxisShift = (endLetter - startLetter)*factor; //iloœæ jednostek przesuniêcia po z
 	xzAxisShift = sqrt(pow(xAxisShift,2)+pow(zAxisShift,2)); //iloœæ jednostek do przesuniêcia xz
 	modelToMove->speedHorizontal = xzAxisShift*modelToMove->speedVertical;
 	modelToMove->shifted = true;

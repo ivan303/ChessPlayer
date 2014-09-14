@@ -5,7 +5,7 @@
 //TODO posprz¹taæ
 
 
-Model::Model(ObjFileLoader *pieceLoaded, int color, int xShift, int zShift){
+Model::Model(ObjFileLoader *pieceLoaded, int color, float xShift, float zShift){
 	//this->fileName = fileName;
 	this->object = pieceLoaded;
 	this->color = color;
