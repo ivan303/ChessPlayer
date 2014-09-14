@@ -11,9 +11,9 @@ TODO:
 Zaimplementować bicie en passant
 */
 
-GameModel::GameModel(MovingPieces &mp) : movingPieces(mp) {
+GameModel::GameModel(MovingPieces &mp, string fileName) : movingPieces(mp) {
 	games = new pgn::GameCollection();
-	loadGame("C:/games.pgn"); // tymczasowo
+	loadGame(fileName); // tymczasowo
 	
 }
 

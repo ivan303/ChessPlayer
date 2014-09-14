@@ -139,9 +139,28 @@ void specialKeyUp(int c, int x, int y){
 		buttonPressed = false;
 }
 
+string fileOpenDialog() {
+	OPENFILENAME ofn;
+    char szFileName[MAX_PATH] = "";
+
+    ZeroMemory(&ofn, sizeof(ofn));
+
+    ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
+    ofn.hwndOwner = 0;
+    ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
+    ofn.lpstrFile = szFileName;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+    ofn.lpstrDefExt = "txt";
+
+    if(GetOpenFileName(&ofn))
+    {
+		return ofn.lpstrFile;
+    }
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-
 	board = new ObjFileLoader("plansza.obj");
 
 	tableOfLoadedModels[0] = new ObjFileLoader("pawn.obj");
@@ -198,6 +217,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	glutInitWindowPosition(0,0);
 	glutCreateWindow("Program OpenGL");     
 
+
 	/*
 	void (*firstPointer)(char,char,char,char);
 	firstPointer = (piecesMoving->movePieceGL);//piecesMoving->movePieceGL;
@@ -207,7 +227,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	*/
 
 	//gameModel = new GameModel(firstPointer,secondPointer);
-	gameModel = new GameModel(*piecesMoving);
+	string gameFileName = fileOpenDialog();
+	gameModel = new GameModel(*piecesMoving, gameFileName);
 	 
 	
 

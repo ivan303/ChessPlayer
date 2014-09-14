@@ -64,7 +64,7 @@ class MovingPieces; // "forward declaration" zeby kompilator sie nie srał
 
 class GameModel{
 public:
-	GameModel(MovingPieces &mp);
+	GameModel(MovingPieces &mp, string);
 	void loadGame(string fileName);
 	void stepNext();
 	GameInfo gameInfo;
