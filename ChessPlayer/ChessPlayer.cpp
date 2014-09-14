@@ -41,18 +41,18 @@ ObjFileLoader *board;
 MovingPieces *piecesMoving;
 GameModel *gameModel;
 
-double factor = 1.1;
+double factor = 1.075;
 
 int licznik = 0;
 
 void displayFrame(void){
+	
 	piecesMoving->initialize.init();
 	piecesMoving->initialize.initLight();
-	glEnable(GL_COLOR_MATERIAL);
-	glShadeModel(GL_SMOOTH);
+	
 		
 	piecesMoving->initDraw();
-
+	
 	glutSwapBuffers();
 }
 void nextFrame(void){
@@ -97,14 +97,7 @@ void specialKeyDown(int c, int x, int y){
 		glm::vec3(0.0f,0.0f,1.0f));
 	}	
 		
-		
-		
-		
-		
-		//if(!piecesMoving->moveInProgress)
-		//	//...
-		//	gameModel->doNextMove();
-	
+	displayFrame();
 
 }
 
@@ -210,7 +203,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	glutDisplayFunc(displayFrame);
 	//glutIdleFunc(nextFrame);
 	glewInit();
-
+	glEnable(GL_COLOR_MATERIAL);
+	glShadeModel(GL_SMOOTH);
 
 	glutMainLoop();
 

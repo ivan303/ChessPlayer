@@ -1,7 +1,6 @@
 #include "stdafx.h"
 //#include <Windows.h>
 #include "MovingPieces.h"
-#include "tga.h"
 
 
 GLuint tex;
@@ -10,7 +9,14 @@ MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7],ObjFileLoader *board){
 	this->loadedModels = loadedModels;
 	this->board = board;
 	moveInProgress = false;
-	factor = 1.1;
+	factor = 1.075;
+	if (img.Load("plansza.tga") == IMG_OK) {
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D,tex);
+	}
+	else {
+		cout << "Error loading texture!" << endl;
+	}
 	
 	
 	//initialize.V = glm::lookAt(
@@ -34,37 +40,79 @@ void MovingPieces::drawPiece(Model *piece){
 	glVertexPointer(3,GL_FLOAT,0,piece->object->verticesArrayToDraw);
 	glNormalPointer(GL_FLOAT,0,piece->object->normalsArrayToDraw);
 	glDrawArrays(GL_TRIANGLES,0,piece->object->verticesArrayToDrawSize);
+	// Materia³
+	if (piece->color == BLACK) {
+		GLfloat emission[] = {0.0f, 0.0f, 0.0f, 1.0f};
+		GLfloat ambient[] = {0.5f, 0.1f, 0.1f, 1.0f};
+		GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat specular[] = {0.5f, 0.5f, 0.5f, 1.0f};
+
+		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 30.0f);
+	}
+	else if (piece->color == WHITE) {
+		GLfloat emission[] = {0.0f, 0.0f, 0.0f, 1.0f};
+		GLfloat ambient[] = {0.5f, 0.1f, 0.1f, 1.0f};
+		GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat specular[] = {0.5f, 0.5f, 0.5f, 1.0f};
+
+		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 50.0f);
+	}
+
+	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 };
 
 void MovingPieces::drawBoard(){
-	TGAImg img;
-	if (img.Load("plansza.tga") == IMG_OK) {
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D,tex);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, img.GetWidth(), img.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img.GetImg());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glEnable(GL_TEXTURE_2D);
-	} else {
-		cout << "Error loading texture!" << endl;
-	}
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, img.GetWidth(), img.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img.GetImg());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-
-
+	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glVertexPointer(3,GL_FLOAT,0,boardModel->object->verticesArrayToDraw);
 	glNormalPointer(GL_FLOAT,0,boardModel->object->normalsArrayToDraw);
 	glTexCoordPointer(2, GL_FLOAT, 0, boardModel->object->texturesArrayToDraw);
+
+	// Materia³
+	GLfloat emission[] = {0.0f, 0.0f, 0.0f, 1.0f};
+	GLfloat ambient[] = {0.5f, 0.5f, 0.5f, 1.0f};
+	GLfloat diffuse[] = {0.1f, 0.1f, 0.1f, 1.0f};
+	GLfloat specular[] = {0.1f, 0.1f, 0.1f, 1.0f};
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 15.0f);
+
 	glDrawArrays(GL_TRIANGLES,0,boardModel->object->verticesArrayToDrawSize);
+
+	// Resetujemy materia³
+	GLfloat mat1[] = {0.0f, 0.0f, 0.0f, 0.0f};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat1);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 0);
+
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisable(GL_TEXTURE_2D);
 };
 
 void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter, char endDigit){
@@ -81,8 +129,7 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 
 	//rzeczy zwi¹zane z opengl
 
-	initialize.init();
-	initialize.initLight();
+	
 	
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
@@ -119,9 +166,9 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 				M = moveInit(iter->second);
 				glLoadMatrixf(glm::value_ptr(initialize.V*M));
 				if(iter->second->color == 0)
-					glColor3d(1.0f,1.0f,1.0f);
+					glColor3d(0.6f,0.6f,0.6f);
 				else
-					glColor3d(0.0f,0.0f,0.0f);
+					glColor3d(0.04f,0.04f,0.04f);
 				drawPiece(iter->second);
 			}
 		}
@@ -190,9 +237,9 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 
 		glLoadMatrixf(glm::value_ptr(initialize.V*M));
 		if(modelToMove->color == 0)
-			glColor3d(1.0f,1.0f,1.0f);
+			glColor3d(0.6f,0.6f,0.6f);
 		else
-			glColor3d(0.0f,0.0f,0.0f);
+			glColor3d(0.04f,0.04f,0.04f);
 		drawPiece(modelToMove);
 		glutSwapBuffers();
 	}
@@ -315,35 +362,14 @@ void MovingPieces::swapPieceGL(char letter, char digit, BoardPiece newPiece){
 				M = moveInit(iter->second);
 				glLoadMatrixf(glm::value_ptr(initialize.V*M));
 				if(iter->second->color == 0)
-					glColor3d(1.0f,1.0f,1.0f);
+					glColor3d(0.6f,0.6f,0.6f);
 				else
-					glColor3d(0.0f,0.0f,0.0f);
+					glColor3d(0.04f,0.04f,0.04f);
 				drawPiece(iter->second);
 			}
 		}
 };
-void MovingPieces::displayFrame(void){
-	glClearColor(0,0,0,1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 P=glm::perspective(25.0f,1.0f,1.0f,50.0f);
-	glm::mat4 V = glm::lookAt(
-		glm::vec3(-15.0f,15.0f,4.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
-		glm::vec3(0.0f,1.0f,0.0f));
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(glm::value_ptr(P));
-	glMatrixMode(GL_MODELVIEW);
-
-	float lightPOs[] = {5, 2, 4, 0};
-	
-	glLoadMatrixf(glm::value_ptr(V));
-	glLightfv(GL_LIGHT0,GL_POSITION,lightPOs);
-
-
-
-	glutSwapBuffers();
-}
 void MovingPieces::initDraw(){
 	glm::mat4 M;
 	std::map<std::pair<char,char>,Model*>::iterator iter;
@@ -353,9 +379,9 @@ void MovingPieces::initDraw(){
 				M = moveInit(iter->second);
 				glLoadMatrixf(glm::value_ptr(initialize.V*M));
 				if(iter->second->color == 0)
-					glColor3d(1.0f,1.0f,1.0f);
+					glColor3d(0.6f,0.6f,0.6f);
 				else
-					glColor3d(0.0f,0.0f,0.0f);
+					glColor3d(0.04f,0.04f,0.04f);
 				drawPiece(iter->second);
 			}
 		}

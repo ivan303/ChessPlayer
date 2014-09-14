@@ -10,9 +10,9 @@ Model::Model(ObjFileLoader *pieceLoaded, int color, float xShift, float zShift){
 	this->object = pieceLoaded;
 	this->color = color;
 	this->speedHorizontal = 0;
-	this->speedVertical = 10; //tutaj zmieniæ na 100
+	this->speedVertical = 20; //tutaj zmieniæ na 100
 	this->dir = up;
-	this->verticalShift = 1;
+	this->verticalShift = 2,3;
 	this->counter = 0;
 	this->shifted = false;
 	this->isCaptured = false;

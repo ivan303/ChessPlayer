@@ -3,10 +3,17 @@
 
 
 Initialization::Initialization(){
-	lightPosition[0] = 5;
-	lightPosition[1] = 2;
+	lightPosition[0] = 10;
+	lightPosition[1] = 10;
 	lightPosition[2] = 4;
-	lightPosition[3] = 0;
+	lightPosition[3] = 1;
+
+	secondLightPosition[0] = 15;
+	secondLightPosition[1] = -10;
+	secondLightPosition[2] = 9;
+	secondLightPosition[3] = 1;
+
+
 	P = glm::perspective(50.0f,1.0f,1.0f,50.0f);
 	V = glm::lookAt(
 		glm::vec3(-15.0f,15.0f,4.0f),
@@ -17,14 +24,29 @@ Initialization::Initialization(){
 
 void Initialization::initLight(){
 	glLoadMatrixf(glm::value_ptr(V));
-	glLightfv(GL_LIGHT0,GL_POSITION,lightPosition);
+	GLfloat mat1[] = {0.4f, 0.4f, 0.4f, 1.0f};
+	GLfloat mat2[] = {0.3f, 0.3f, 0.3f, 1.0f};
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 	glEnable(GL_DEPTH_TEST);
+
+	glLightfv(GL_LIGHT0,GL_POSITION,lightPosition);
+	glLightfv(GL_LIGHT0,GL_SPECULAR,mat1);
+	glLightfv(GL_LIGHT0,GL_DIFFUSE,mat1);
+	glLightfv(GL_LIGHT0,GL_AMBIENT,mat1);
+
+	glLightfv(GL_LIGHT1,GL_POSITION,lightPosition);
+	glLightfv(GL_LIGHT1,GL_SPECULAR,mat2);
+	glLightfv(GL_LIGHT1,GL_DIFFUSE,mat2);
+	glLightfv(GL_LIGHT1,GL_AMBIENT,mat2);
+
+	
 };
 
 void Initialization::init(){
-	glClearColor(0.66,0.66,0.66,1);
+	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	/*P = glm::perspective(50.0f,1.0f,1.0f,50.0f);
 	glm::mat4 V = glm::lookAt(

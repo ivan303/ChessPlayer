@@ -8,6 +8,7 @@
 #include "Model.h"
 
 #include "Initialization.h"
+#include "tga.h"
 #include <iostream>
 #include <map>
 #include <utility>
@@ -24,6 +25,7 @@ public:
 	std::list<Model*> piecesCaptured;
 	float factor;
 
+	TGAImg img;
 
 	bool moveInProgress;
 	Initialization initialize;
@@ -33,7 +35,6 @@ public:
 
 	MovingPieces(ObjFileLoader*[7],ObjFileLoader*);
 	
-	void static displayFrame(void);
 	void drawBoard();
 	void drawPiece(Model*);
 	void movePieceGL(char,char,char,char);

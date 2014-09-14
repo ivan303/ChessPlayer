@@ -11,7 +11,7 @@ public:
 	glm::mat4 P;
 	glm::mat4 V;
 	float lightPosition[4];
-	
+	float secondLightPosition[4];
 	
 	Initialization();
 
