@@ -22,6 +22,8 @@ public:
 	Model *boardModel;
 	int sratatatat;
 	std::list<Model*> piecesCaptured;
+	float factor;
+
 
 	bool moveInProgress;
 	Initialization initialize;

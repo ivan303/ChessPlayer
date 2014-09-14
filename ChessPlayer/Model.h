@@ -10,7 +10,7 @@ enum directions{
 class Model{
 public:
 	//Model(std::string,int,int,int);
-	Model(ObjFileLoader*,int,int,int);
+	Model(ObjFileLoader*,int,float,float);
 	
 	//std::string fileName;
 	std::string pieceName;

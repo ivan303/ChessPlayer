@@ -41,7 +41,7 @@ ObjFileLoader *board;
 MovingPieces *piecesMoving;
 GameModel *gameModel;
 
-int factor = 1.5;
+double factor = 1.1;
 
 int licznik = 0;
 
