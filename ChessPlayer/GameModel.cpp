@@ -47,6 +47,12 @@ void GameModel::loadGame(string filename) {
 
 	}
 
+	string last = gameInfo.moveStrings.back();
+	if (last == "") {
+		gameInfo.moveStrings.pop_back();
+	}
+
+
 	nextMoveStrIter = gameInfo.moveStrings.begin();
 	nextMoveColor = WHITE;
 
@@ -226,6 +232,7 @@ vector<pair<char,char>> GameModel::getPossibleMoveSources(BoardPiece piece, char
 
 MoveInfo GameModel::getNextMove() {
 	MoveInfo moveInfo;
+	
 	moveInfo.isEnding = false;
 
 	if (nextMoveStrIter == gameInfo.moveStrings.end()) {
@@ -364,8 +371,11 @@ MoveInfo GameModel::getNextMove() {
 
 bool GameModel::doNextMove() {
 	MoveInfo nextMove = getNextMove();
+	cout << nextMove.algebraicStr << endl;
 	string nextMoveStr = nextMove.moveStr;
-	if (nextMove.isEnding)  return false;
+	//cout << nextMove.isEnding << endl;
+	if (nextMove.isEnding)
+		return false;
 	Color color = nextMoveColor;
 
 	if (nextMove.isQueensideCastling) {
@@ -418,6 +428,7 @@ bool GameModel::doNextMove() {
 			movingPieces.swapPieceGL(toLetter, toDigit, nextMove.promoteTo);
 		}
 	}
+
 
 
 	if (nextMoveColor == WHITE) nextMoveColor = BLACK;
