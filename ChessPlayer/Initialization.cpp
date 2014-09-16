@@ -46,7 +46,7 @@ void Initialization::initLight(){
 };
 
 void Initialization::init(){
-	glClearColor(0,0,0,1);
+	glClearColor(1,1,1,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	/*P = glm::perspective(50.0f,1.0f,1.0f,50.0f);
 	glm::mat4 V = glm::lookAt(
