@@ -131,6 +131,7 @@ void GameModel::loadGame(string filename) {
 
 }
 
+// TODO: some problems with rooks (most probably only rooks - as positions of queens and bishops are unambiguous)
 vector<pair<char,char>> GameModel::getPossibleMoveSources(BoardPiece piece, char toLetter, char toDigit, bool isPawnCapture) {
 	vector<pair<char,char>> fromCoordsVector;
 	switch (piece) {

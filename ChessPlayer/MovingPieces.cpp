@@ -17,31 +17,12 @@ MovingPieces::MovingPieces(ObjFileLoader *loadedModels[7],ObjFileLoader *board){
 	else {
 		cout << "Error loading texture!" << endl;
 	}
-	
-	
-	//initialize.V = glm::lookAt(
-	//	//glm::vec3(-15.0f,15.0f,4.0f),
-	//	glm::vec3(4.0f,10.0f,10.0f),
-	//	glm::vec3(4.0f,0.0f,4.0f),
-	//	glm::vec3(0.0f,1.0f,0.0f));
-	
-	
-	
-	/*V = glm::lookAt(
-		glm::vec3(4.0f,10.0f,4.0f),
-		glm::vec3(4.0f,0.0f,4.0f),
-		glm::vec3(1.0f,0.0f,0.0f));*/
-	
 };
 
 void MovingPieces::drawPiece(Model *piece){
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glVertexPointer(3,GL_FLOAT,0,piece->object->verticesArrayToDraw);
-	glNormalPointer(GL_FLOAT,0,piece->object->normalsArrayToDraw);
-	glDrawArrays(GL_TRIANGLES,0,piece->object->verticesArrayToDrawSize);
 	// Materia³
 	if (piece->color == BLACK) {
+		glColor3d(0.04f,0.04f,0.04f);
 		GLfloat emission[] = {0.0f, 0.0f, 0.0f, 1.0f};
 		GLfloat ambient[] = {0.5f, 0.1f, 0.1f, 1.0f};
 		GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -55,6 +36,7 @@ void MovingPieces::drawPiece(Model *piece){
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 30.0f);
 	}
 	else if (piece->color == WHITE) {
+		glColor3d(0.6f,0.6f,0.6f);
 		GLfloat emission[] = {0.0f, 0.0f, 0.0f, 1.0f};
 		GLfloat ambient[] = {0.5f, 0.1f, 0.1f, 1.0f};
 		GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -67,8 +49,12 @@ void MovingPieces::drawPiece(Model *piece){
 
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 50.0f);
 	}
-
-	
+		
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glVertexPointer(3,GL_FLOAT,0,piece->object->verticesArrayToDraw);
+	glNormalPointer(GL_FLOAT,0,piece->object->normalsArrayToDraw);
+	glDrawArrays(GL_TRIANGLES,0,piece->object->verticesArrayToDrawSize);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 };
@@ -128,14 +114,11 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 	Model *modelToMove;
 
 	//rzeczy zwi¹zane z opengl
-
-	
-	
+	/*
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
-
-
-
+	*/
+	
 	modelToMove = pieceDictionary[pieceToMove];
 	
 	//transformacje zwi¹zane z animacj¹
@@ -148,7 +131,6 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 	modelToMove->speedHorizontal = xzAxisShift*modelToMove->speedVertical;
 	modelToMove->shifted = true;
 	
-
 	while(modelToMove->shifted){
 
 		initialize.init();
@@ -160,19 +142,8 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 		glLoadMatrixf(glm::value_ptr(initialize.V*M));
 		glColor3d(0.5f,0.5f,0.5f);
 		drawBoard();
-	
-		for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
-			if(iter->second != NULL && iter->first != pieceToMove && !(iter->second->isCaptured)){
-				M = moveInit(iter->second);
-				glLoadMatrixf(glm::value_ptr(initialize.V*M));
-				if(iter->second->color == 0)
-					glColor3d(0.6f,0.6f,0.6f);
-				else
-					glColor3d(0.04f,0.04f,0.04f);
-				drawPiece(iter->second);
-			}
-		}
 
+		drawAllPieces(pieceToMove);
 
 		M = moveInit(modelToMove);
 
@@ -236,10 +207,6 @@ void MovingPieces::movePieceGL(char startLetter, char startDigit, char endLetter
 		}
 
 		glLoadMatrixf(glm::value_ptr(initialize.V*M));
-		if(modelToMove->color == 0)
-			glColor3d(0.6f,0.6f,0.6f);
-		else
-			glColor3d(0.04f,0.04f,0.04f);
 		drawPiece(modelToMove);
 		glutSwapBuffers();
 	}
@@ -355,38 +322,27 @@ void MovingPieces::swapPieceGL(char letter, char digit, BoardPiece newPiece){
 		break;
 	}
 
-	std::map<std::pair<char,char>,Model*>::iterator iter;
-	glm::mat4 M;
-	for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
-			if(iter->second != NULL){
-				M = moveInit(iter->second);
-				glLoadMatrixf(glm::value_ptr(initialize.V*M));
-				if(iter->second->color == 0)
-					glColor3d(0.6f,0.6f,0.6f);
-				else
-					glColor3d(0.04f,0.04f,0.04f);
-				drawPiece(iter->second);
-			}
-		}
+	drawAllPieces();
 };
 
-void MovingPieces::initDraw(){
-	glm::mat4 M;
+void MovingPieces::drawAllPieces(std::pair<char,char> excludedPiece) {
 	std::map<std::pair<char,char>,Model*>::iterator iter;
-	
+	glm::mat4 M;
 	for(iter = pieceDictionary.begin(); iter!=pieceDictionary.end(); iter++){
-			if(iter->second != NULL && !(iter->second->isCaptured)){
+			if(iter->second != NULL && iter->first != excludedPiece && !(iter->second->isCaptured)){
 				M = moveInit(iter->second);
 				glLoadMatrixf(glm::value_ptr(initialize.V*M));
-				if(iter->second->color == 0)
-					glColor3d(0.6f,0.6f,0.6f);
-				else
-					glColor3d(0.04f,0.04f,0.04f);
 				drawPiece(iter->second);
 			}
 		}
+}
 
-	M = moveInit(boardModel);
+
+void MovingPieces::initDraw(){
+	glm::mat4 M = moveInit(boardModel);
+
+	drawAllPieces();
+
 	glLoadMatrixf(glm::value_ptr(initialize.V*M));
 	glColor3d(0.5f,0.5f,0.5f);
 	drawBoard();

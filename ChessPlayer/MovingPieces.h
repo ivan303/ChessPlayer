@@ -42,4 +42,6 @@ public:
 	glm::mat4 moveInit(Model*);
 	void initDictionary(Model*[4][8],Model*);
 	void initDraw();
+
+	void drawAllPieces(std::pair<char,char> = pair<char,char>());
 };

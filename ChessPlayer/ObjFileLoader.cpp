@@ -32,7 +32,7 @@ void ObjFileLoader::loadObj(std::string fileName, std::vector<glm::vec4> &vertic
 	std::ifstream in;
 	in.open(fileName);
 	if(in.is_open())
-		std::cout << "otwarty";
+		std::cout << "Wczytywanie " << fileName << ", faza 1... ";
 
 	
 
@@ -64,13 +64,13 @@ void ObjFileLoader::loadObj(std::string fileName, std::vector<glm::vec4> &vertic
 				//przy vt 1-y
 	}
 	in.close();
-
+	std::cout << "OK" << std::endl;
 }
 void ObjFileLoader::loadIndices(std::string fileName, std::vector<std::vector<int>> &verIndicies, std::vector<std::vector<int>> &norIndicies, std::vector<std::vector<int>> &texIndicies){
 	std::ifstream in;
 	in.open(fileName);
 	if(in.is_open())
-		std::cout << "otwarty";
+		std::cout << "Wczytywanie " << fileName << ", faza 2... ";
 
 	char line[255];
 	int v[3], n[3], t[3];
@@ -97,7 +97,7 @@ void ObjFileLoader::loadIndices(std::string fileName, std::vector<std::vector<in
 		}
 	}
 	in.close();
-	
+	std::cout << "OK" << std::endl;
 }
 void ObjFileLoader::loadVerticesIntoArray(){
 	vertices = new float[3*v.size()];
